@@ -1,0 +1,35 @@
+{
+ "_about": "What a running phone's own machine state looks like, as data. The recorded profile's sysinfo / statfs / process sections are that one phone at the second it was captured - free memory, the load averages, the process count, the free disk blocks, the PID. Copying them means every install of a cohort reports the same free memory and the same PID, which is the 'carried over from a real phone' residue rather than a simulation.",
+
+ "_why": "Measured on two derived installs: uptime now differs (lan_section.py draws it), but freeram, procs, loads, free disk blocks and the PID were byte-identical. None of them identifies the recorded unit, so nothing was leaked - but none of them is a property of the MODEL either, so a cohort sharing them is a cohort of one machine.",
+
+ "_source": "The recorded phone's own numbers are the anchor: totalram 7924690944 (7.4 GiB, a Pixel 8), freeram 316551168, loads [86508, 96338, 104858], procs 738, /data f_bavail 11532016 of f_blocks 28743861. The ranges below are stated around those, as rules rather than as measurements of this model - a phone's free memory at a given second is not a model property and no capture can pin its distribution.",
+
+ "total_is_model": true,
+ "_total_is_model": "totalram, totalswap, mem_unit and the filesystems' f_blocks / f_bsize / f_type are the MODEL's: every Pixel 8 reports the same RAM size and the same partition geometry, so they stay exactly as recorded. Only what is free or in use at this moment is drawn.",
+
+ "free_ram_fraction": {"low": 0.025, "high": 0.22, "mode": 0.055},
+ "_free_ram_fraction": "freeram as a share of totalram. Android keeps very little strictly free - it fills the rest with page cache and reclaims on demand - so the recording's 316551168 / 7924690944 = 4.0 % is the normal shape, not a low outlier.",
+
+ "shared_ram_fraction": {"low": 0.003, "high": 0.015, "mode": 0.0061},
+ "buffer_ram_fraction": {"low": 0.00005, "high": 0.0008, "mode": 0.00014},
+ "_ram_fractions": "sharedram and bufferram, likewise as shares of totalram (the recording: 48435200 and 1138688).",
+
+ "free_swap_fraction": {"low": 0.35, "high": 0.95, "mode": 0.6},
+ "_free_swap_fraction": "a phone that has been up a while has swapped something out; one just rebooted has not. The recording sat at 2366668800 / 3962339328 = 60 %.",
+
+ "load_per_core": {"low": 0.02, "high": 0.9, "mode": 0.18},
+ "load_decay": {"low": 0.78, "high": 1.22},
+ "_load": "the three load averages, as load per CPU core (the kernel reports them scaled by 65536). The 5- and 15-minute figures follow the 1-minute one multiplied by load_decay, so the three are a plausible curve rather than three independent draws - the recording's [86508, 96338, 104858] rises over the longer windows, which is what a phone that has just been woken looks like.",
+
+ "procs": {"low": 620, "high": 900, "mode": 740},
+ "_procs": "how many processes exist. A phone runs its own services plus whatever the user has open; the recording had 738.",
+
+ "disk_used_fraction": {"low": 0.25, "high": 0.92, "mode": 0.6},
+ "_disk_used_fraction": "how full /data is. f_blocks stays the model's; f_bavail and f_bfree follow from this. The recording was 60 % used (11532016 free of 28743861).",
+
+ "pid": {"low": 2000, "high": 32000},
+ "_pid": "the app's own process id. Linux hands these out in order from a per-boot counter, so a phone that has been up for days is well into the range while one just rebooted is low - but the value says nothing about the model, and every install reporting 29755 is one machine.",
+
+ "_not_touched": "process.status / process.stat beyond the pid, the thread lists, environ and mapped_files are left exactly as recorded: they describe how the app's own process is laid out, which is the same on every phone running this build, and the thread names and memory map are what metasec expects to find."
+}

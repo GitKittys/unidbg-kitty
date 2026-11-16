@@ -1,0 +1,26 @@
+{
+ "_about": "The storage and ambient-sensor figures the device_info beacon reports, as data. Measured in the register chain's app_log: app_storage_size 59356623 (byte precision), storage_available_internal_size / _external_size 2332, draft_storage_size 99, light_percent 0.09411765 (seven decimals). Every install derived from the recording sends those same numbers.",
+
+ "_why": "These are the fields that pass the 'could this be a fingerprint' test. They are stable over the short term - how full a phone is does not change minute to minute - so one value shared by a cohort is a clustering key, and the precision makes it worse: 59356623 bytes and 0.09411765 are exact enough that a collision between two real phones is implausible. Contrast the instantaneous ones in the same beacon (memory_available_size, cpu_freq, cell_acc): those change second to second and cannot be traced back to a unit, so they are left as recorded.",
+
+ "_kept_as_recorded": "The model's own properties stay: memory_total_size, storage_total_internal_size / _external_size, screen_width / _height / _dpi, cpu_core_nums, cpu_vendor, model, brand, board, hardware, product, manufacturer, os_version, os_api_level, abis, build_time, rom_version. Every phone of this model reports them, and changing one would describe hardware that does not exist.",
+
+ "app_storage_bytes": {"low": 41000000, "high": 240000000, "mode": 62000000},
+ "_app_storage_bytes": "how much the app itself occupies. It grows with use - caches, downloaded resources, drafts - so a fresh install sits low and a used one high. Reported to the byte, so the drawn value must not be a round number either.",
+
+ "draft_storage": {"low": 0, "high": 400, "mode": 90},
+ "_draft_storage": "the drafts folder. A guest account that has never recorded anything still reports a small number (the recording: 99).",
+
+ "storage_total_gb": 5614,
+ "_storage_total_gb": "the model's own capacity in the unit this beacon uses (the recording sends 5614 for both total_internal and total_external). Kept, not drawn - it is the hardware.",
+
+ "storage_free_fraction": {"low": 0.06, "high": 0.72, "mode": 0.38},
+ "_storage_free_fraction": "how much of that capacity is still free. The recording was 2332/5614 = 42 %. Internal and external report the same figure on this model, so one draw feeds both.",
+
+ "light_percent": {"low": 0.0, "high": 1.0, "mode": 0.12},
+ "light_decimals": 8,
+ "_light_percent": "the ambient light sensor as a fraction. Indoors in the evening it is near zero, outdoors near one; most readings are low. The device reports it with many decimals (0.09411765 = 24/255, i.e. a raw 8-bit reading divided by 255), so the draw is quantised the same way rather than being a free float - a value that is not n/255 would be its own tell.",
+
+ "light_raw_max": 255,
+ "_light_raw_max": "0.09411765 x 255 = 24.0 exactly, so the sensor's raw reading is an 8-bit value and the fraction is raw/255."
+}

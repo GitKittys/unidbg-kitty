@@ -1,0 +1,71 @@
+{
+ "_about": "true first-install device_register plaintext (inst4, t=55.8s): 50 header fields, device_id/install_id absent, no event/log_data/launch. Network addresses redacted. sig_hash = md5(apk_signing_cert.der).",
+ "magic_tag": "ss_app_log",
+ "header": {
+  "display_name": "抖音",
+  "update_version_code": 39409900,
+  "manifest_version_code": 390401,
+  "app_version_minor": "",
+  "aid": 1128,
+  "channel": "huawei_1128_64",
+  "package": "com.ss.android.ugc.aweme",
+  "app_version": "39.4.0",
+  "version_code": 390400,
+  "sdk_version": "3.7.3-rc.106-douyin",
+  "sdk_target_version": 29,
+  "git_hash": "f86c2ef",
+  "os": "Android",
+  "os_version": "15",
+  "os_api": 35,
+  "device_model": "Pixel 8",
+  "device_brand": "google",
+  "device_manufacturer": "Google",
+  "device_category": "phone",
+  "cpu_abi": "arm64-v8a",
+  "release_build": "0225a30_20260626_c9b1b154-713d-11f1-9d6c-deaad4b028a1",
+  "density_dpi": 420,
+  "display_density": "mdpi",
+  "resolution": "2205x1080",
+  "language": "zh",
+  "timezone": 8,
+  "access": "wifi",
+  "not_request_sender": 0,
+  "carrier": "China Unicom",
+  "mcc_mnc": "46001",
+  "rom": "13277630",
+  "rom_version": "BP1A.250505.005.B1",
+  "cdid": "040375e5-4d8c-4d55-80e2-f2c52ee13bee",
+  "sig_hash": "aea615ab910015038f73c47e45d21466",
+  "openudid": "55e002178bcbe5d6",
+  "clientudid": "e0be1e4d-ec28-4d81-949e-1ddfb2696a95",
+  "ipv6_list": [
+   {
+    "type": "client_anpi",
+    "value": "!redacted!"
+   },
+   {
+    "type": "client_anpi",
+    "value": "!redacted!"
+   },
+   {
+    "type": "client_anpi",
+    "value": "!redacted!"
+   }
+  ],
+  "region": "CN",
+  "tz_name": "Asia/Shanghai",
+  "tz_offset": 28800,
+  "sim_region": "cn",
+  "sim_serial_number": [],
+  "oaid_may_support": false,
+  "req_id": "12ad81cb-bee9-451e-a07d-e137ee696a51",
+  "device_platform": "android",
+  "custom": {
+   "client_ipv4": "0.0.0.0"
+  },
+  "apk_first_install_time": 1792920528876,
+  "is_system_app": 0,
+  "sdk_flavor": "china",
+  "guest_mode": 0
+ }
+}

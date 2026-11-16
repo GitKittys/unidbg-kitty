@@ -1,0 +1,47 @@
+{
+ "_about": "constants of this build of libmetasec_ml.so, not device values. Offsets are module-relative and change with the .so; names are the library's own (Keva repositories and keys, the environment variable the app sets before loadLibrary). Another build = another file here.",
+ "package": "com.ss.android.ugc.aweme",
+ "library": "libmetasec_ml.so",
+ "offsets": {
+  "context": "0x56cf10",
+  "mask": "0x56cf38",
+  "chain": "0x56d350",
+  "sbox": "0x117170",
+  "sdi": "0x57e3d0",
+  "uuid": "0x57a990"
+ },
+ "sign_entries": {
+  "masked": [
+   "0x2c7148",
+   "0x2c6fb0"
+  ],
+  "plain": [
+   "0x290c5c",
+   "0x291324"
+  ]
+ },
+ "keva": {
+  "repo": "d8b674543fc0b023b69f6a3f5a0f287d458ea204",
+  "sdi_key_suffix": "-0-sdi",
+  "event_key_suffix": "-0-167774bf518c11948aa0784351ccf5a9"
+ },
+ "state": "0x130",
+ "slots": {
+  "string_length": "0xc",
+  "string_data": "0x10",
+  "sdi_token": "0x60"
+ },
+ "config": {
+  "app_id": "0x8",
+  "did": "0x38",
+  "iid": "0x48",
+  "session": "0x58",
+  "sdk_version": "0xb0",
+  "object": "0x8"
+ },
+ "env": {
+  "name": "28d7fdd567361198183fa7b8e",
+  "value": "a7"
+ },
+ "encryptor": "/data/app/~~R-MzQbS1GTQpWdRJsYFPwA==/com.ss.android.ugc.aweme-XdEds4p0LuK8Tdo0Vwifyw==/lib/arm64/libEncryptor.so"
+}

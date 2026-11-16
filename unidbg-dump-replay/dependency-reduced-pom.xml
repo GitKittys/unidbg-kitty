@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <artifactId>unidbg</artifactId>
+    <groupId>com.github.zhkl0228</groupId>
+    <version>0.9.10-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>unidbg-dump-replay</artifactId>
+  <name>unidbg-dump-replay</name>
+  <description>用 AndroidPrybar 的 trace_unidbg_dump 采样出的 dump 包（regs.txt + *.bin 内存段），
+        在真实 Unidbg 里重建执行现场并跑一遍，验证 dump 包的完整性与正确性。
+        不依赖 Module/Loader/DalvikVM，只用 Backend 的 mem_map/reg_write/emu_start 公开接口。
+        样例 dump 数据见 sample-dumps/ 目录（由 AndroidPrybar 的采样用例产出）。</description>
+  <build>
+    <finalName>unidbg-dump-replay</finalName>
+    <plugins>
+      <plugin>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.5.1</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <transformers>
+                <transformer>
+                  <mainClass>test.ReplaySha256</mainClass>
+                </transformer>
+              </transformers>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13.2</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>hamcrest-core</artifactId>
+          <groupId>org.hamcrest</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-reload4j</artifactId>
+      <version>2.0.16</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>reload4j</artifactId>
+          <groupId>ch.qos.reload4j</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+  </dependencies>
+</project>

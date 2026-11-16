@@ -1,0 +1,166 @@
+{
+ "_about": "set4（掩码 215，签名入口 0x290c5c）的 f3.a 调用顺序，由 fp_values_full_set4.json 的 f3a 按 count 展开、按 t_ms 排序得到；与 set5 的 session.json 同一推导方式",
+ "network": "off",
+ "signs_at_ms": [
+  12762
+ ],
+ "flow": [
+  {
+   "cmd": "0x1000003",
+   "record": 0,
+   "t_ms": 2721
+  },
+  {
+   "cmd": "0x5000001",
+   "record": 0,
+   "t_ms": 2730
+  },
+  {
+   "cmd": "0x5000001",
+   "record": 1,
+   "t_ms": 3750
+  },
+  {
+   "cmd": "0x4000001",
+   "record": 0,
+   "t_ms": 3870
+  },
+  {
+   "cmd": "0x4000002",
+   "record": 0,
+   "t_ms": 3909
+  },
+  {
+   "cmd": "0x9000001",
+   "record": 0,
+   "t_ms": 3938
+  },
+  {
+   "cmd": "0x4000002",
+   "record": 1,
+   "t_ms": 3982
+  },
+  {
+   "cmd": "0x200000e",
+   "record": 0,
+   "t_ms": 3985
+  },
+  {
+   "cmd": "0xa000003",
+   "record": 0,
+   "t_ms": 4348
+  },
+  {
+   "cmd": "0xa000001",
+   "record": 0,
+   "t_ms": 4622
+  },
+  {
+   "cmd": "0x4000004",
+   "record": 0,
+   "t_ms": 4738
+  },
+  {
+   "cmd": "0x100000a",
+   "record": 0,
+   "t_ms": 4930
+  },
+  {
+   "cmd": "0x3000003",
+   "record": 0,
+   "t_ms": 6188
+  },
+  {
+   "cmd": "0x1000006",
+   "record": 0,
+   "t_ms": 6435
+  },
+  {
+   "cmd": "0x200000d",
+   "record": 0,
+   "t_ms": 12452
+  },
+  {
+   "cmd": "0x200000d",
+   "record": 1,
+   "t_ms": 12453
+  },
+  {
+   "cmd": "0x200000d",
+   "record": 2,
+   "t_ms": 12454
+  },
+  {
+   "cmd": "0x2000004",
+   "record": 0,
+   "t_ms": 12664
+  },
+  {
+   "cmd": "0x2000002",
+   "record": 0,
+   "t_ms": 12912
+  },
+  {
+   "cmd": "0x2000003",
+   "record": 0,
+   "t_ms": 12914
+  },
+  {
+   "cmd": "0x2000009",
+   "record": 0,
+   "t_ms": 39503
+  },
+  {
+   "cmd": "0x200000f",
+   "record": 0,
+   "t_ms": 39518
+  },
+  {
+   "cmd": "0x2000001",
+   "record": 0,
+   "t_ms": 39521
+  },
+  {
+   "cmd": "0x200000d",
+   "record": 3,
+   "t_ms": 41308
+  },
+  {
+   "cmd": "0x200000d",
+   "record": 4,
+   "t_ms": 41328
+  },
+  {
+   "cmd": "0x200000d",
+   "record": 5,
+   "t_ms": 41330
+  },
+  {
+   "cmd": "0x2000001",
+   "record": 1,
+   "t_ms": 54363
+  },
+  {
+   "cmd": "0x2000001",
+   "record": 2,
+   "t_ms": 69367
+  },
+  {
+   "cmd": "0x2000001",
+   "record": 3,
+   "t_ms": 73782
+  },
+  {
+   "cmd": "0x100000a",
+   "record": 1,
+   "t_ms": 75244
+  },
+  {
+   "cmd": "0x2000001",
+   "record": 4,
+   "t_ms": 103845
+  }
+ ],
+ "msb": {},
+ "_msb": "nothing set: MS.b(0x1000000e) is recorded as Long:215 in this dataset"
+}

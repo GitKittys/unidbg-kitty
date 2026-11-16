@@ -1,0 +1,61 @@
+{
+ "_about": "What a phone's accelerometer does, as data. metasec polls MS.b(0x1000013) every 10 s and reports the samples taken since the last poll under 'acc' in report field /#9/#3 (doc/mssdk-report-fields.md); only sampling slot 1 is written, so gyro/euler stay empty and the accelerometer carries the whole signal. Motion.java generates the series from this file and holds no numbers of its own: the physics (gravity projected onto the device's attitude) is the algorithm, every quantity is here.",
+ "_source": "the recorded phone's own samples (fp_values_full.json msb 0x1000013: -0.01,0.36,9.79 / -0.02,0.36,9.80) are 1 g at a constant 2.11 deg from flat, i.e. a phone lying still on a table. Those are the resting case below; the moving cases are the physics of a phone being held and carried, not measurements of this model, so they are stated as ranges rather than claimed as recorded values.",
+ "_warning": "Replaying the recorded answers is what this replaces: ProfileJni clamps to the last recorded answer, so after the third poll the device reports the same two vectors for the rest of the session - an accelerometer that stopped while the app kept being used.",
+
+ "gravity": 9.80665,
+ "_gravity": "standard gravity, the scale the accelerometer reports on; every sample's magnitude is built from it",
+
+ "sample_ms": 4000,
+ "_sample_ms": "the interval between samples inside a poll window. The recording returned 1-2 samples per 10 s poll, so the device samples at about this rate for reporting purposes (not the sensor's own hardware rate).",
+
+ "max_samples_per_poll": 6,
+ "_max_samples_per_poll": "however long the gap before a poll, the device's buffer holds only so many",
+
+ "first_poll_empty": true,
+ "_first_poll_empty": "the recording's first poll answered null: metasec's buffer had not filled yet. Ours does the same so the series starts the way the device's does.",
+
+ "resting_attitude": [
+  {"share": 0.70, "tilt_from": 0.0, "tilt_to": 6.0, "_": "flat on a table or a desk, give or take the surface's own wobble"},
+  {"share": 0.23, "tilt_from": 8.0, "tilt_to": 43.0, "_": "in a hand, or leaning against something"},
+  {"share": 0.07, "tilt_from": 50.0, "tilt_to": 90.0, "_": "propped up on a stand, nearly standing"}
+ ],
+ "_resting_attitude": "where an owner happens to leave the phone, in degrees from flat. Drawn once per install: it is that person's habit, not a per-request value.",
+
+ "initial_activity": {"held": 0.45, "resting": 0.40, "walking": 0.15},
+ "_initial_activity": "what the phone is doing when a session starts - being looked at, or sitting where it was left",
+
+ "activities": {
+  "resting": {
+   "noise": 0.004,
+   "drift": 0.00035,
+   "stickiness": 0.90,
+   "transitions": {"held": 0.80, "resting": 0.20},
+   "_": "on a surface: one attitude, only the sensor's own noise on top. A phone on a table does not start walking by itself."
+  },
+  "held": {
+   "noise": 0.085,
+   "drift": 0.010,
+   "stickiness": 0.75,
+   "transitions": {"resting": 0.55, "held": 0.30, "walking": 0.15},
+   "_": "in a hand, the owner reading: the attitude drifts and a hand is never quite still"
+  },
+  "walking": {
+   "noise": 0.40,
+   "drift": 0.055,
+   "stickiness": 0.55,
+   "transitions": {"held": 0.65, "walking": 0.35},
+   "_": "carried: the step cadence loads and unloads the whole vector around 1 g"
+  }
+ },
+ "_activities": "noise = per-sample noise (m/s^2); drift = how fast the attitude itself wanders (radians/s); stickiness = the chance a poll window keeps this activity; transitions = what it becomes when it does not (shares, summing to 1).",
+
+ "stride_hz": 1.9,
+ "stride_hz_spread": 0.15,
+ "stride_amplitude": 1.15,
+ "_stride": "a walking cadence is about two steps a second; the amplitude is how far the magnitude swings either side of 1 g over a stride. Consecutive samples of one walk share a phase, so a walk reads as a walk rather than as independent noise.",
+
+ "settle_tilt_from": 0.0,
+ "settle_tilt_to": 7.0,
+ "_settle_tilt": "put down: the phone comes to rest at a new attitude, not the one it had in the hand"
+}

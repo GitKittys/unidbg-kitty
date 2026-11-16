@@ -1,0 +1,86 @@
+{
+ "_about": "What a phone's home network and uptime look like, as data. The LAN address is reported BY the app (metasec report /#7/#5 iip, built from SIOCGIFCONF + RTM_GETROUTE), not connected from, so a proxy cannot change it and a shared one ties the cohort together regardless of exit IP. lan_section.py applies this file and holds no numbers of its own.",
+ "_source": "The recorded phone was 192.168.1.17 behind 192.168.1.1 with 68893 s of uptime - one moment of one phone. The subnet shares below are how consumer routers hand out private ranges, stated as data rather than claimed as measurements.",
+ "subnets": [
+  {
+   "share": 0.62,
+   "prefix": "192.168",
+   "third_octet_from": null,
+   "third_octet_choices": [
+    0,
+    1,
+    1,
+    1,
+    2,
+    3,
+    8,
+    10,
+    31,
+    50,
+    100
+   ],
+   "_": "the ranges a router's own default puts a home network on, 192.168.1.x most often"
+  },
+  {
+   "share": 0.22,
+   "prefix": "192.168",
+   "third_octet_from": 0,
+   "third_octet_to": 20,
+   "third_octet_choices": null,
+   "_": "the rest of the common 192.168.x space"
+  },
+  {
+   "share": 0.1,
+   "prefix": "10.0",
+   "third_octet_from": null,
+   "third_octet_choices": [
+    0,
+    0,
+    1,
+    2
+   ],
+   "_": "routers that default to the 10/8 range"
+  },
+  {
+   "share": 0.06,
+   "prefix": "172",
+   "second_octet_from": 16,
+   "second_octet_to": 31,
+   "third_octet_from": 0,
+   "third_octet_to": 4,
+   "third_octet_choices": null,
+   "_": "the 172.16-31 range"
+  }
+ ],
+ "host_in_dhcp_pool": {
+  "share_high_pool": 0.55,
+  "high_from": 100,
+  "high_to": 199,
+  "low_from": 2,
+  "low_to": 99
+ },
+ "_host_in_dhcp_pool": "a router hands addresses out of a pool: .100-.199 on most, .2-.99 on the rest. Never .1, which is the router itself.",
+ "gateway_host": 1,
+ "_gateway_host": "the router's own address inside the subnet: .1 on nearly every consumer router",
+ "uptime_bands": [
+  {
+   "share": 0.34,
+   "hours_from": 0.5,
+   "hours_to": 8,
+   "_": "restarted this morning, or recently"
+  },
+  {
+   "share": 0.33,
+   "hours_from": 8,
+   "hours_to": 72,
+   "_": "up for a day or three"
+  },
+  {
+   "share": 0.33,
+   "hours_from": 72,
+   "hours_to": 500,
+   "_": "most phones are not rebooted for weeks"
+  }
+ ],
+ "_uptime_bands": "how long the phone has been up. badger's boot time (fts 12) is derived as now - uptime, so this governs that too and the two stay consistent."
+}

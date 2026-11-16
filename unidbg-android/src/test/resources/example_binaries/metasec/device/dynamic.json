@@ -1,0 +1,67 @@
+{
+ "_about": "The profile answers that are a MOMENT of a phone rather than a property of its model, and the rule each one follows. The profile itself is a recording: every JNI entry is frozen at the millisecond it was captured (getStreamVolume has one record, {\"args\":[1],\"ret\":5,\"count\":6} - asked six times, answered 5 six times) and the format cannot express 'this may have changed since'. This file supplies that missing notion. DynamicValues applies it at the single point every profile answer passes through, so there is one mechanism rather than a patch per field.",
+
+ "_division_of_labour": "Data lives here; time lives in the code. This file states quantities and RULES ('volume changes about once every 20 minutes, within 0..15'), never a precomputed timeline of values: the guest clock advances by executed instructions (VirtualClock), not by wall time, so a timeline computed outside would desync the moment the emulator runs fast or slow - and no recording of a real phone's volume over an hour exists to compute one from. A stated rule is honest about being a rule; an invented timeline stored as data would dress a guess up as a measurement.",
+
+ "_two_files": "The first file (fp_values_install.json) is the install's initial fingerprint: generated once when the device is raised, then never touched. This one drives what changes afterwards - read at launch, used, written back to state.json, carried into the next launch. Anything a later request has to report consistently with an earlier one belongs in that ledger, not in the fingerprint.",
+
+ "kinds": {
+  "per_install": "drawn once when the device is raised and then constant for its life: a setting its owner has, not a moment",
+  "drifts": "moves continuously with the guest clock, from wherever the last launch left it (battery, cell temperature)",
+  "occasionally_changes": "holds a value, then jumps to another now and then; the mean interval says how often",
+  "per_launch": "drawn fresh each time the app opens: true for this session, meaningless across sessions"
+ },
+
+ "values": {
+  "android.media.AudioManager.getStreamVolume(I)I": {
+   "kind": "occasionally_changes",
+   "integer": true,
+   "from": 0,
+   "to": 15,
+   "mean_minutes_between_changes": 25,
+   "start": {"low": 0, "high": 15, "mode": 7},
+   "_": "STREAM_MUSIC on this model has 15 steps. The recording caught one phone at 5; a cohort that all answer 5 is a cohort with one owner. It changes when someone presses a volume key, which is occasional, not continuous."
+  },
+  "android.os.PowerManager.isPowerSaveMode()Z": {
+   "kind": "per_install",
+   "integer": true,
+   "choices": [0, 0, 0, 0, 0, 0, 0, 0, 1],
+   "_": "battery saver: off on most phones, on for the minority who leave it on. A per-install setting, not something that flips mid-session."
+  },
+  "android.provider.Settings$System.getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I": {
+   "kind": "per_install",
+   "integer": true,
+   "by_argument": {
+    "screen_brightness": {"from": 10, "to": 255, "start": {"low": 10, "high": 255, "mode": 110},
+                          "_": "0..255 on this model; people mostly sit well below maximum"},
+    "screen_brightness_mode": {"choices": [1, 1, 1, 0], "_": "1 = automatic, which is the default most leave alone"},
+    "screen_off_timeout": {"choices": [15000, 30000, 60000, 120000, 300000, 600000],
+                           "_": "the values the Settings UI actually offers"}
+   },
+   "_": "Settings.System.getInt answers many keys; each one is its own value, so they are addressed by argument."
+  },
+  "MS.b(0x1000017)": {
+   "kind": "drifts",
+   "model": "battery",
+   "_": "the battery percent. Its behaviour is device/battery.json; this entry only says the answer is a drifting one so the ledger carries it between launches."
+  },
+  "MS.b(0x1000013)": {
+   "kind": "drifts",
+   "model": "motion",
+   "_": "the accelerometer samples since the last poll. Its behaviour is device/motion.json. Drifts rather than per_launch because the attitude a phone is left at belongs to its owner's habit and carries over."
+  }
+ },
+
+ "ledger": {
+  "_about": "What state.json carries between launches, and what each entry means. The replay reads these at launch, advances them, and writes them back; a request that must agree with an earlier launch reads them rather than inventing a value.",
+  "last_opened_ms": "when the app was last closed, in wall-clock ms. How long the phone has been idle since: the battery drains in standby, and a long enough gap means the level is redrawn rather than continued (device/battery.json redraw_after_hours).",
+  "battery": "{percent, charging}: where the last launch left the charge. See device/battery.json.",
+  "motion": "{tilt_degrees, activity}: the attitude and what the phone was doing when the last launch ended.",
+  "event_id_last": "the app log's lifetime event counter. Already carried; listed here because it is the same kind of value.",
+  "launches": "how many times this install has opened the app.",
+  "last_video": "the video id this install last reported watching, so a later launch's requests can refer to what it actually saw rather than to the recording's video. NOT YET SUPPLIED: the swipe-video capture has not been collected, so nothing writes this yet and the key stays absent until it is.",
+  "last_author": "the author whose profile it last visited. Same state as last_video - waiting on the same capture."
+ },
+
+ "_pending": "Fields known to be a moment of the recorded phone but not yet modelled, left answering the recorded value on purpose rather than guessed at: the 37-entry sensor list (a model property, so it is correct as recorded - only its readings are a moment, and those are MS.b(0x1000013)), cpu_usage, storage_available_external_size, anr_available_memory, light_percent. Each needs either a rule we can defend or device material; neither is invented here."
+}

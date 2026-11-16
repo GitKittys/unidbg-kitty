@@ -1,0 +1,54 @@
+{
+ "_about": "How a person watches short videos, as data. One watch record per video is the source for BOTH telemetry channels: aweme/stats' pre_item_playtime and app_log's play_time.duration. doc/handoff-env-chain.md §13.5 measured those equal for 22 of 22 videos, so they must come from one record rather than being generated twice - the recording satisfies this only because both sides are its own numbers.",
+
+ "_why": "The recording's own values (play_time durations 14772 / 1668 / 21099 ms, and the cold-start catch-up's playtime=21099 with max_progress=22732) are one person's session, and every install derived from it reports that same session. All three do carry millisecond remainders, so they pass the cheapest check doc §12.7 names - but 52 devices reporting identical watch durations is the same shared-constant problem as the battery was.",
+
+ "_verified": "Everything below marked (measured) comes from doc/handoff-env-chain.md §12-§14, measured on the device 2026-10-31. Everything else is a rule stated as data, not a claim about this model.",
+
+ "batch_seconds": 5,
+ "_batch_seconds": "(measured, §12.6) entries are packed about every 5 s - URL carries target_batch_time=5 / batch_time=5. Leaving a video produces an entry; it is NOT one request per swipe (15 requests held 23 entries).",
+
+ "first_swipe_delay_seconds": 6.2,
+ "later_swipe_delay_seconds": 2.5,
+ "_swipe_delay": "(measured, §13.8/§13.9) after a cold start the first swipe's entry goes out about 6 s later (6.2 and 6.7 s in two runs); a swipe mid-session goes out 2-3 s later.",
+
+ "no_report_while_dwelling": true,
+ "_no_report_while_dwelling": "(measured, §13.8) staying on one video sends nothing. The dwell is settled in one entry when the video is left.",
+
+ "actions": {"left_video": 1, "cold_start_catch_up": 3},
+ "_actions": "(measured, §13.6) a video left during the session reports action=1; the first entry after a cold start is action=3 and reports the video the PREVIOUS session was last on. Other values of video_play_action are not understood and are not produced here.",
+
+ "dwell_bands": [
+  {"share": 0.87, "low": 1.5, "high": 7.0, "mode": 4.6,
+   "_": "(measured) 20 of the recording's 23 entries were under 10 s, ranging 1.564-6.754 s with a 4.603 s median - someone scrolling"},
+  {"share": 0.10, "low": 7.0, "high": 40.0, "mode": 20.0,
+   "_": "watching something through, or pausing to read"},
+  {"share": 0.03, "low": 40.0, "high": 130.0, "mode": 60.0,
+   "_": "(measured) the recording's tail: 24.149, 25.536 and 122.184 s, i.e. 3 of 23 - a video left playing while attention is elsewhere"}
+ ],
+ "_dwell_bands": "how long a person stays on a video before swiping, as shares of a session. A single range cannot produce the measured shape: the recording is 87 % under 10 s yet reaches 122 s, so the short case and the tail are stated separately. A dwell is never a whole number of seconds: see millisecond_remainder.",
+
+ "millisecond_remainder": true,
+ "_millisecond_remainder": "(measured, §12.7) 23 of 23 recorded playtimes were NOT whole seconds - the player's own progress always carries a remainder. The doc calls this the cheapest tell there is: a simulator filling 3000 / 5000 / 8000 is findable with one query. Never round a duration to a whole second.",
+
+ "video_length_seconds": {"low": 4.0, "high": 30.0, "mode": 9.0},
+ "_video_length_seconds": "the videos themselves. The recording saw pre_item_time from 4.573 to 24.567 s. A feed answer's own duration is used when we have it; this is the fallback.",
+
+ "loop_share": 0.18,
+ "_loop_share": "(measured, §13.6) a video left running loops, and playtime then accumulates past the video's own length - the recording has playtime=122184 on a 5.3 s video. So a dwell longer than the video is normal, not a contradiction.",
+
+ "finish_when_seen_fraction": 0.92,
+ "_finish_when_seen_fraction": "(measured, §13.6) pre_item_is_finish=1 appears together with max_progress at about the video's length. Watching past this fraction of it counts as finished.",
+
+ "max_progress_may_exceed_length": true,
+ "_max_progress_may_exceed_length": "(measured, §13.10) the constraint 'max_progress <= video length' was RETRACTED by the device side: a cold-start entry had max_progress=8960 against pre_item_time=7067. Do not enforce it.",
+
+ "cold_start_catch_up": {
+  "_about": "(measured, §13.6/§13.9) the first entry of a cold start reports the video the last session ended on, so what was last watched and for how long has to survive the app closing - it lives in the install's state ledger (DeviceState), not here.",
+  "when_nothing_watched_yet": "empty",
+  "_when_nothing_watched_yet": "(measured) a brand-new install's catch-up entry carries an EMPTY pre_item_playtime - it has no previous session. The register chain's recorded entry shows exactly that, so a first install must not invent one."
+ },
+
+ "feed_seen_ids_grow": true,
+ "_feed_seen_ids_grow": "(measured, §12.3) the feed request body carries the ids already watched, and the count grows as the session goes on (101 -> 123 -> 144 -> 166 de-duplicated). Not yet produced here: our feed bodies are the recording's, and rewriting that list is its own piece of work."
+}

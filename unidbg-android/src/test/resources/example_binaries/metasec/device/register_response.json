@@ -1,0 +1,10 @@
+{
+ "server_time": 1793186715,
+ "device_id": 6929143813141416,
+ "install_id": 3532151463499319,
+ "klink_egdi": "AAIhkUjNgi65ZLlJzVcAC4XiddT6r8p-5E_9EKl6mXGSj0DIu9AJv07j",
+ "new_user": 0,
+ "device_id_str": "6929143813141416",
+ "install_id_str": "3532151463499319",
+ "_about": "recorded answer of log.snssdk.com/service/2/device_register/ (regcap chain_requests.json, run10 t=58872). device_token and dtrait_pk1 are deliberately not included."
+}

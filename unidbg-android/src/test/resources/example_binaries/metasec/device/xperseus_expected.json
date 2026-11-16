@@ -1,0 +1,20 @@
+{
+ "_about": "X-Perseus 反欺诈 JSON 里真机稳定的那部分（3 份真机抓包 xpc/ 一致）。其余字段不比较，原因写在 _not_compared。",
+ "_source": "init/dyn/xperseus/xpc/pack_*/plain_*.bin（2026-10-28，同进程 3 次签名，hook libmetasec_ml.so+0x265244 抓的加密前明文）",
+ "expected": {
+  "cmr": 16777216,
+  "cmr2": 16777216,
+  "vpn": 0,
+  "sts": 59,
+  "kd": 0,
+  "do": 1,
+  "tk": true
+ },
+ "_not_compared": {
+  "un_h": "真机稳定但来源未定位（资料记为“某系统哈希/句柄”），unidbg 里恒为 4092618538",
+  "pd": "= crc32(本进程会话 UUID)，UUID 每进程随机（测试已按公式断言）",
+  "fkd": "= crc32(md5hex(UUID + kd))，同上",
+  "fl": "= 初始化校验链 d350..d360（测试已断言等于本次运行的链）",
+  "lp": "运行期探测串，真机自己每次也变"
+ }
+}

@@ -1,0 +1,5 @@
+target_addr=0x7150b0342c
+module_base=0x7150a69000
+module_end=0x7150c97c08
+module_offset=0x9a42c
+module_path=/data/app/~~0uSG0ztFBQ8Q8Wz1_LKjNw==/com.xiaoke.unicrontest-8bsbyJKFQw0Nxq1ZArw5cA==/lib/arm64/libtest.so

@@ -1,0 +1,111 @@
+/*.iml
+/.idea/
+/unidbg-android/src/test/resources/unpack/*_unpacked.so
+/target/
+*.DS_Store
+**/dev/log
+/unidbg-android/src/test/native/android/obj/
+/unidbg-api/unidbg-api.iml
+/unidbg-api/target/
+/unidbg-android/unidbg-android.iml
+/unidbg-ios/unidbg-ios.iml
+/unidbg-ios/target/
+/unidbg-android/target/
+/backend/*/target/
+/backend/*/*.iml
+*.i64
+*.idb
+/unidbg-ios/src/test/resources/native/swift/swift_library.o
+/unidbg-ios/src/test/resources/native/swift/swift_library-Swift.h
+/backend/hypervisor/src/main/native/hypervisor/cmake-build-debug/
+/backend/hypervisor/src/main/native/hypervisor/.idea/
+/unidbg-ios/src/test/resources/example_binaries/cpu_features
+/unidbg-ios/src/test/resources/example_binaries/ios_cpu_features
+/backend/unicorn2/src/main/native/unicorn-src.tar
+
+# account session values of the recorded sign request (cookies, x-tt-dt): keep local
+/unidbg-android/src/test/resources/example_binaries/metasec/device/sign_request.json
+hs_err_pid*.log
+
+# build output of the standalone replay tool
+/unidbg-dump-replay/target/
+
+# local Claude Code settings
+/.claude/settings.json
+# local Claude settings variants may carry API keys
+/.claude/settings*.json
+/.claude/settings.local.json
+
+# reached comment list capture (account session values)
+/unidbg-android/src/test/resources/example_binaries/metasec/device/comment_request.json
+/unidbg-android/src/test/resources/example_binaries/metasec/device/ws_request.json
+/unidbg-android/src/test/resources/example_binaries/metasec/device/live_room.json
+/unidbg-android/src/test/resources/example_binaries/metasec/device/share_link_room.json
+/unidbg-android/src/test/resources/example_binaries/metasec/device/mssdk_http.json
+# badger's Java-side values of the recorded device (doc/tools/badger_values.py builds it from the dyn_live recordings)
+/unidbg-android/src/test/resources/example_binaries/metasec/device/badger.json
+# 逐包原始记录：148 个请求的完整头，含 odin_tt / passport_csrf_token / ticket-guard 证书
+/doc/share-link-chain.md
+
+# other analysis workloads kept local: not part of this fork's published work
+/unidbg-android/src/test/java/mbk/
+/unidbg-android/src/test/java/com/phonepe/
+/unidbg-android/src/test/resources/phonepe/
+
+# local build scratch (compiled classes, classpath dumps, captured stdio)
+/_mbk_classes/
+/_out/
+/_cp.txt
+/_cpc.txt
+/_cpr.txt
+/_cp_dep.txt
+/unidbg-android/cp_real.txt
+/unidbg-android/src/main/resources/android/sdk23/stdout.txt
+/unidbg-android/src/main/resources/android/sdk23/stderr.txt
+__pycache__/
+*.pyc
+
+# metasec: only the algorithm-call example ships; the live-chain and standalone
+# test drivers stay local (see MetasecDemo for the published entry point)
+/unidbg-android/src/test/java/com/bytedance/mobsec/metasec/ml/AckSignProbe.java
+/unidbg-android/src/test/java/com/bytedance/mobsec/metasec/ml/ApplogUpload.java
+/unidbg-android/src/test/java/com/bytedance/mobsec/metasec/ml/AttestationChain.java
+/unidbg-android/src/test/java/com/bytedance/mobsec/metasec/ml/AttestationChainTest.java
+/unidbg-android/src/test/java/com/bytedance/mobsec/metasec/ml/BadgerBridge.java
+/unidbg-android/src/test/java/com/bytedance/mobsec/metasec/ml/BadgerJni.java
+/unidbg-android/src/test/java/com/bytedance/mobsec/metasec/ml/BadgerRun.java
+/unidbg-android/src/test/java/com/bytedance/mobsec/metasec/ml/BatteryFillTest.java
+/unidbg-android/src/test/java/com/bytedance/mobsec/metasec/ml/CapturedApiTest.java
+/unidbg-android/src/test/java/com/bytedance/mobsec/metasec/ml/ChainReplay.java
+/unidbg-android/src/test/java/com/bytedance/mobsec/metasec/ml/CohortProof.java
+/unidbg-android/src/test/java/com/bytedance/mobsec/metasec/ml/DtraitHeader.java
+/unidbg-android/src/test/java/com/bytedance/mobsec/metasec/ml/DtraitHeaderTest.java
+/unidbg-android/src/test/java/com/bytedance/mobsec/metasec/ml/DynamicValuesTest.java
+/unidbg-android/src/test/java/com/bytedance/mobsec/metasec/ml/EncryptorTest.java
+/unidbg-android/src/test/java/com/bytedance/mobsec/metasec/ml/FetchTimeoutTest.java
+/unidbg-android/src/test/java/com/bytedance/mobsec/metasec/ml/LiveRoomChain.java
+/unidbg-android/src/test/java/com/bytedance/mobsec/metasec/ml/LiveWssSession.java
+/unidbg-android/src/test/java/com/bytedance/mobsec/metasec/ml/LiveWssSessionTest.java
+/unidbg-android/src/test/java/com/bytedance/mobsec/metasec/ml/MetasecSignRequest.java
+/unidbg-android/src/test/java/com/bytedance/mobsec/metasec/ml/MotionHookTest.java
+/unidbg-android/src/test/java/com/bytedance/mobsec/metasec/ml/MotionTest.java
+/unidbg-android/src/test/java/com/bytedance/mobsec/metasec/ml/MssdkLive.java
+/unidbg-android/src/test/java/com/bytedance/mobsec/metasec/ml/ProtobufBodyTest.java
+/unidbg-android/src/test/java/com/bytedance/mobsec/metasec/ml/RegisterFlowTest.java
+/unidbg-android/src/test/java/com/bytedance/mobsec/metasec/ml/RoomOwnerTest.java
+/unidbg-android/src/test/java/com/bytedance/mobsec/metasec/ml/SwipeBatchTest.java
+/unidbg-android/src/test/java/com/bytedance/mobsec/metasec/ml/Sword.java
+/unidbg-android/src/test/java/com/bytedance/mobsec/metasec/ml/SwordTest.java
+/unidbg-android/src/test/java/com/bytedance/mobsec/metasec/ml/TicketGuard.java
+/unidbg-android/src/test/java/com/bytedance/mobsec/metasec/ml/TicketGuardTest.java
+/unidbg-android/src/test/java/com/bytedance/mobsec/metasec/ml/WatchCarryTest.java
+/unidbg-android/src/test/java/com/bytedance/mobsec/metasec/ml/Watching.java
+/unidbg-android/src/test/java/com/bytedance/mobsec/metasec/ml/WatchingTest.java
+# dlopen(NULL) shim for the local mbk workload (see /unidbg-android/src/test/java/mbk/)
+/unidbg-android/src/test/java/com/github/unidbg/linux/android/MbkArmLD64.java
+
+# research notes and tooling: kept local, not part of the published fork
+/doc/
+
+# working instructions for this fork: local only
+/CLAUDE.md

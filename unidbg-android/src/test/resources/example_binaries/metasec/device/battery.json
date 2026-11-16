@@ -1,0 +1,53 @@
+{
+ "_about": "How a phone's battery behaves, as data. The charge is reported three ways - MS.b(0x1000017) as a percent string, badger's device trait 17 as {status, level fraction, millivolts, plugged}, and app_log's power_percent - so all three have to come from one level, and that level has to move while a session runs. battery_section.py draws each install its starting level from this file and ChainReplay discharges it; neither holds numbers of its own.",
+ "_source": "The recording's own three values disagree (94, 100 % on a charger, and 91: three moments of one launch), so none of them is 'the' battery and the recorded state is not reusable. The discharge and charge rates below are a phone's ordinary behaviour, stated as data rather than claimed as measurements of this model; the voltage curve is a lithium cell's resting voltage against charge, whose flat middle is why a phone sits near 3.8 V for most of a day.",
+
+ "charging_share": 0.22,
+ "_charging_share": "the share of phones plugged in at any given moment",
+
+ "level_when_charging": {"from": 55, "to": 99},
+ "_level_when_charging": "people plug in when it is getting low and unplug near full",
+
+ "level_when_discharging": {"low": 12, "high": 96, "mode": 62},
+ "_level_when_discharging": "a triangular draw: a phone in someone's hand is more often part-way down than freshly full or nearly dead",
+
+ "discharge_percent_per_hour": 8.0,
+ "_discharge_percent_per_hour": "in use, with the screen on and the network busy",
+
+ "charge_percent_per_hour": 35.0,
+ "_charge_percent_per_hour": "on a charger",
+
+ "standby_percent_per_hour": 1.2,
+ "_standby_percent_per_hour": "between launches, with the app closed",
+
+ "floor_percent": 3,
+ "redraw_after_hours": 6,
+ "_redraw_after_hours": "a longer gap than this and the phone has lived its own life since (charged, or not): a fresh level, rather than pretending to model the hours in between",
+
+ "voltage_curve": [
+  [0.00, 3250], [0.05, 3500], [0.10, 3620], [0.20, 3710], [0.40, 3800],
+  [0.60, 3890], [0.80, 4040], [0.90, 4160], [0.95, 4250], [1.00, 4400]
+ ],
+ "_voltage_curve": "[level as a fraction, millivolts] pairs, interpolated between, so any level gives a voltage that is not a round number",
+
+ "charging_voltage_offset": {"from": 60, "to": 180},
+ "_charging_voltage_offset": "a cell reads above its resting voltage while current is flowing into it",
+
+ "voltage_jitter": 12,
+ "_voltage_jitter": "the reading's own noise, either side, in millivolts",
+
+ "cell_temperature": {
+  "ambient_from": 24.0,
+  "ambient_to": 28.0,
+  "charging_extra_from": 3.5,
+  "charging_extra_to": 6.0,
+  "warming_per_hour": 1.6,
+  "ceiling": 36.0,
+  "ceiling_charging": 41.0
+ },
+ "_cell_temperature": "degrees Celsius. A cell sits a few degrees over the room while the screen is on, warmer again while it charges, and warms slowly over a session.",
+
+ "status": {"charging": 2, "discharging": 3},
+ "plugged": {"charging": 1, "discharging": 0},
+ "_status": "android.os.BatteryManager's own constants: BATTERY_STATUS_CHARGING/_DISCHARGING and BATTERY_PLUGGED_AC"
+}

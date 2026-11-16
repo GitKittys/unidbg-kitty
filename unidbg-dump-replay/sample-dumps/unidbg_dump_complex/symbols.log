@@ -1,0 +1,17 @@
+0x71e67fc990 <unresolved>
+0x71e6a13310 <unresolved>
+0x71e6a133a0 <unresolved>
+0x71e6a133d0 <unresolved>
+0x71e6aa2bf0 <unresolved>
+0x747955c330 close
+0x74795641c0 __open_2
+0x7479579cc0 sscanf
+0x7479594f20 __pread_chk
+0x7479595040 __read_chk
+0x74795955c0 __strncpy_chk
+0x7479595600 __strncpy_chk2
+0x74795957f0 __vsnprintf_chk
+0x7479595cc0 __memcpy_chk
+0x7479595d00 __memset_chk
+0x74795b67a0 strtok
+0x74795bff80 strstr
