@@ -109,3 +109,11 @@ __pycache__/
 
 # working instructions for this fork: local only
 /CLAUDE.md
+
+# an AndroidKeyStore attestation chain is device-unique material: imported from outside, never committed
+# (see example_binaries/metasec/device/keystore/README.md; the published profile names no chain at all)
+/unidbg-android/src/test/resources/example_binaries/metasec/device/keystore/*.der
+/unidbg-android/src/test/resources/example_binaries/metasec/device/keystore/*.pem
+/unidbg-android/src/test/resources/example_binaries/metasec/device/keystore/*.p12
+# the app's own signing certificate: the local badger/register drivers md5 it; not needed by the published demo
+/unidbg-android/src/test/resources/example_binaries/metasec/device/apk_signing_cert.der

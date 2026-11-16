@@ -20,8 +20,32 @@ import java.util.Map;
  * cmd), {@code jni} (JNI calls metasec makes, keyed by {@code class.name(desc)ret} or {@code class.fieldDesc}) and {@code props}
  * (system properties; null = the device has no such property).
  * <p>
- * Value encoding: strings as is, boxed values {@code "Integer:5"}, long values {@code "0x.."}, byte[] {@code {cls:"[B",hex}},
- * primitive arrays {@code {cls:"[I",v:[..]}}, object arrays {@code {cls:"[L..;",v:[..]}}, other objects {@code {cls}} (a handle).
+ * Value encoding: strings as is, boxed values {@code "Integer:5"}, long values {@code "0x.."}, byte[] {@code {cls:"[B",hex}} or
+ * {@code {cls:"[B",file:"name.der"}}, primitive arrays {@code {cls:"[I",v:[..]}}, object arrays {@code {cls:"[L..;",v:[..]}},
+ * other objects {@code {cls}} (a handle).
+ *
+ * <h2>What this profile does not contain</h2>
+ * The published profile is de-identified: every value in it is a self-consistent placeholder, and none of it came off a device
+ * that is still identifiable from it. Two consequences worth stating, because both look like gaps and are not:
+ * <ul>
+ *   <li><b>No AndroidKeyStore attestation chain.</b> The library asks {@code AndroidKeyStore} for a key and reads its key
+ *       attestation certificate chain. Such a chain is only meaningful through its root of trust, and that root reaches a device
+ *       through Google's certification programme - a build with no Google Mobile Services, as a great many mainland-China retail
+ *       builds are, has no Google-rooted chain to show. The records are therefore absent and the library takes the
+ *       no-attestation branch, which is a real device state rather than a gap: returning {@code null} from
+ *       {@code getCertificateChain} on a device was measured to make the client retry three times, 30 s apart, and then omit the
+ *       one request that needs the chain entirely - no empty chain, no forged chain, no substitute packet, and the registration
+ *       flow unaffected. A self-signed chain is actively worse than none: the server verifies it cryptographically and rejects
+ *       it, which reads as a device faking attestation. The published example never reaches these calls at all
+ *       ({@code MetasecSign} passes with {@code not on record (0)}). To exercise the attested branch, import a chain from a
+ *       genuine keybox - see {@code device/keystore/README.md}.</li>
+ *   <li><b>No app signing certificate.</b> {@code apk_signing_cert.der} is the application's own certificate, and the
+ *       published demo never reads it; only the local badger/register drivers do, to take its digest. Supply it from the APK
+ *       ({@code apksigner verify --print-certs --out <dir> base.apk}) when running those.</li>
+ * </ul>
+ * Device-unique material is always imported, never inlined and never opened at the point of use: a {@code byte[]} answer may
+ * name a side file ({@code "file"}, read once by {@link ProfileJni}), {@code TicketGuard} takes its keys from an identity
+ * object, and {@code AttestationChain} takes a keybox from {@code -Dchain.keybox=<path>}. No such path is compiled in.
  */
 final class DeviceProfile {
 

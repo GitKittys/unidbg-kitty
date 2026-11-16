@@ -108,6 +108,44 @@ class ProfileJni extends AbstractJni {
         return missing;
     }
 
+    /**
+     * The bytes of a recorded {@code byte[]} value. Two spellings, so that material which should not live in a published profile
+     * can be kept out of it:
+     * <ul>
+     *   <li>{@code {"cls":"[B","hex":".."}} - the bytes inline, how the exporter writes an ordinary value. This wins when both
+     *       are present: the exporter also notes the dump it read a large value from ({@code "file":"set5/..."}), and that note
+     *       names a directory the published example does not carry.</li>
+     *   <li>{@code {"cls":"[B","file":"name.der"}} and no {@code hex} - the bytes in a file beside the profile, which is how a
+     *       value that is device-unique material (a key, a certificate) is supplied. It is read here, once, when the value is
+     *       first built; nothing opens a file at the point the value is used, and no path is compiled in. See
+     *       {@code device/keystore/README.md}, and {@link DeviceProfile} for what the published profile leaves out.</li>
+     * </ul>
+     */
+    private byte[] bytes(JSONObject object) {
+        String hex = object.getString("hex");
+        if (hex != null) {
+            try {
+                return Hex.decodeHex(hex.toCharArray());
+            } catch (DecoderException e) {
+                throw new IllegalStateException(e);
+            }
+        }
+        String file = object.getString("file");
+        if (file == null) {
+            throw new IllegalStateException("a byte[] value with neither hex nor file: " + object);
+        }
+        File side = new File(profile.dir(), file);
+        if (!side.isFile()) {
+            throw new IllegalStateException("the profile answers a byte[] from " + side + ", which is not there."
+                    + " Supply that file, or drop the record naming it.");
+        }
+        try {
+            return FileUtils.readFileToByteArray(side);
+        } catch (IOException e) {
+            throw new IllegalStateException("cannot read " + side, e);
+        }
+    }
+
     @Override
     public DvmObject<?> callStaticObjectMethodV(BaseVM vm, DvmClass dvmClass, String signature, VaList vaList) {
         if (MS_B.equals(signature)) {
@@ -796,11 +834,7 @@ class ProfileJni extends AbstractJni {
         JSONObject object = (JSONObject) value;
         String cls = object.getString("cls");
         if ("[B".equals(cls)) {
-            try {
-                return new ByteArray(vm, Hex.decodeHex(object.getString("hex").toCharArray()));
-            } catch (DecoderException e) {
-                throw new IllegalStateException(e);
-            }
+            return new ByteArray(vm, bytes(object));
         }
         if ("[I".equals(cls)) {
             JSONArray elements = object.getJSONArray("v");
