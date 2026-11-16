@@ -40,7 +40,7 @@ AndroidEmulator emulator = AndroidEmulatorBuilder.for64Bit()
 
 More is finished than is merged. Time, not capability. But these are genuinely open:
 
-- **Engine-level `UC_HOOK_CODE_FAST`.** [`FastTracer`](unidbg-api/src/main/java/com/github/unidbg/arm/FastTracer.java) already beats unidbg's existing `AssemblyCodeDumper` by a wide margin in pure Java — zero register read-back, an L1 disassembly cache keyed by address, a 64 KB buffer flushed every 8192 entries. The prize left is in the JIT: a per-instruction callback with the register snapshot inlined into translated code. A sibling fork measured roughly 10x that way, but for a different design (lazy live-register reads rather than a per-instruction snapshot), so that number does not transfer and we have not measured ours. The JIT codegen patches apply cleanly to this branch; the hook-slot plumbing conflicts and needs hand-placing. Not started, and the benchmark CLAUDE.md asks for is part of the unlanded work.
+- **Engine-level `UC_HOOK_CODE_FAST`.** [`FastTracer`](unidbg-api/src/main/java/com/github/unidbg/arm/FastTracer.java) already beats unidbg's existing `AssemblyCodeDumper` by a wide margin in pure Java — zero register read-back, an L1 disassembly cache keyed by address, a 64 KB buffer flushed every 8192 entries. The prize left is in the JIT: a per-instruction callback with the register snapshot inlined into translated code. Done that way the callback stops being a JNI round trip per instruction, and the order of magnitude that buys is the point of the exercise — a related engine of ours reaches roughly 10x on a lazy-read variant of the design, which is the figure to beat rather than one to quote for this branch. The JIT codegen patches apply cleanly here; the hook-slot plumbing conflicts and needs hand-placing. The benchmark that would put a real number on it is part of the same unlanded work.
 - **macOS.** The committed `libunicorn.dylib` files for `osx_64` and `osx_arm64` are still upstream's and carry none of these engine changes. On macOS the backend warns once at creation and the EL0 boundary, PAC setup, the CPU-feature view and the virtual clock stay off — you silently get close to stock behaviour even if you do ask for `unicorn2`. The signal model is pure Java and still works. Rebuilding needs a Mac. Linux x64/arm64 and Windows x64 are built from the fork and shipped.
 - **iOS-side integration** of the EL0 and signal work.
 - **Known residual limits**, all deliberate: the dispatcher stays cooperative, so a spin loop with no syscall never sees another thread unless you enable preemption via `registerEmuCountHook` (nearly free now on the fork engine); `SA_RESTART` is unimplemented, so interrupted waits always return `-EINTR`; no timer-driven signals (`setitimer`/`timer_create` SIGALRM, SIGCHLD); SIGBUS is not modelled; syscalls given bad guest pointers do not return `-EFAULT`; `sve_context` is written as "not in SVE state"; and 32-bit gets none of this. One deliberate exception to "default backend unchanged": the `/proc/<pid>/fd/` `NumberFormatException` in `resolve()` was an accidental crash, so that fix applies to every backend.
@@ -67,6 +67,26 @@ bash build.sh            # clones unicorn-kitty@unidbg into ~/git/unicorn, then 
 ```
 
 It is a plain `git clone`, not a submodule, so `--recursive` neither helps nor hurts. Override any of it through the environment: `UNICORN_REPO`, `UNICORN_BRANCH`, and `UNICORN_HOME` (point the last at a checkout you already have). The script verifies the checkout really is this fork before building and stops with the exact clone command if it is not, so you never silently link against upstream unicorn. Docker supplies the Linux and Windows toolchains; the macOS dylibs still need a Mac and are currently upstream's, as noted above.
+
+## The example: a hardened library, brought up and called
+
+`MetasecDemo` under `unidbg-android/src/test/java/com/bytedance/mobsec/metasec/ml/` is one entry point for the whole thing. It brings a commercial Android hardening library up from a recorded profile and then exercises each of its distinct native call sites:
+
+```bash
+java ... MetasecDemo            # every demo below, then the mssdk channel as a dry run
+java ... MetasecDemo http       # the HTTP request sign: seven headers at once
+java ... MetasecDemo ws         # the WebSocket sign: a different call site, X-Cylons alone
+java ... MetasecDemo both       # the same input through both entries, side by side
+java ... MetasecDemo ttencrypt  # the applog / device_register body envelope
+java ... MetasecDemo mssdk      # the report channel (dry run; --live to actually send)
+```
+
+Nothing reaches the network unless you ask: the signing happens inside the emulator, and `mssdk` only sends with `--live`. It is the clearest demonstration of what the fidelity work above buys — a library that checks where it is running, running anyway.
+
+The device is data, never code: every value comes from an external profile (`-Dmetasec.profile`, read through `DeviceProfile`), so no device is baked into the source. Two things you supply yourself:
+
+- **The libraries.** `libmetasec_ml.so` and its companions live under the rootfs at `data/app/<install>/lib/arm64/`. Offsets in `device/metasec.json` are matched to one build of them.
+- **Files that are placeholders here.** The ROM libraries, the APK slices and the signing certificate are stand-ins of the right size — the emulation only stats them, never parses their bytes, so the size is all that is load-bearing. Each one says so in its first line. Drop your own copies at the same paths to run against the real thing.
 
 ## Also here: replay instead of environment-building
 
