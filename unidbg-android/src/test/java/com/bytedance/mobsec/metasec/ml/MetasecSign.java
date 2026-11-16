@@ -1851,7 +1851,7 @@ public class MetasecSign {
         emulator.getThreadDispatcher().runThreadsUntilIdle();
         System.out.printf("  %d ms, %d threads%n", System.currentTimeMillis() - start, emulator.getThreadDispatcher().getTaskCount());
 
-        JSONObject request = json("device/sign_request.json");
+        JSONObject request = json(signRequest());
         StringBuilder headers = new StringBuilder();
         for (Object pair : request.getJSONArray("headers")) {
             JSONArray header = (JSONArray) pair;
@@ -2327,6 +2327,21 @@ public class MetasecSign {
                 failures.add(String.format("d%x = 0x%x, the README formula gives 0x%x", 0x350 + 4 * i, chain[i], expected[i]));
             }
         }
+    }
+
+    /**
+     * The request to sign: the recorded one where it is present, otherwise the de-identified example that ships with the
+     * repository. {@code sign_request.json} holds a recorded session (cookie, install id, trace id) and is deliberately not
+     * published, so a clean clone has only the example - and must still run, since this reference sign happens during the
+     * init flow that every entry point goes through, {@link MetasecDemo} included.
+     */
+    private static String signRequest() {
+        if (new File(RESOURCES, "device/sign_request.json").isFile()) {
+            return "device/sign_request.json";
+        }
+        System.out.println("== signing the de-identified example request"
+                + " (device/sign_request.json is not here; it holds a recorded session and is not published)");
+        return "device/sign_request.example.json";
     }
 
     private static JSONObject json(String path) throws IOException {
