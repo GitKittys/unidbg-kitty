@@ -2,6 +2,16 @@
 
 **A fork of [unidbg](https://github.com/zhkl0228/unidbg) that stops the emulator from giving itself away — and makes your hooks actually fire.**
 
+> **包含七神（metasec）的完整补环境例子 / A complete worked environment for the "seven gods" (metasec) hardening library.**
+>
+> 仓库自带一个可运行的完整例子（[`MetasecDemo`](unidbg-android/src/test/java/com/bytedance/mobsec/metasec/ml/MetasecDemo.java)，详见
+> [下文](#the-example-a-hardened-library-brought-up-and-called)）：把一个商业加固库在模拟器里完整拉起来，并逐个调用它各个
+> native 入口。设备值全部来自外部 profile，源码里不内置任何设备指纹。
+>
+> **微信 / WeChat：`klovemh3344`** — 学术交流、技术讨论欢迎来找我。
+> Added purely for academic exchange and technical discussion — questions about the emulation
+> and fidelity work are welcome.
+
 You know the two bad afternoons.
 
 The first: you set a hook, or patch an instruction, and *nothing happens*. No error, no warning. The callback never fires, the patch never takes, and you spend hours doubting your address arithmetic — because the engine was quietly re-running a translation it cached before your hook existed.
@@ -83,10 +93,11 @@ java ... MetasecDemo mssdk      # the report channel (dry run; --live to actuall
 
 Nothing reaches the network unless you ask: the signing happens inside the emulator, and `mssdk` only sends with `--live`. It is the clearest demonstration of what the fidelity work above buys — a library that checks where it is running, running anyway.
 
-The device is data, never code: every value comes from an external profile (`-Dmetasec.profile`, read through `DeviceProfile`), so no device is baked into the source. Two things you supply yourself:
+The device is data, never code: every value comes from an external profile (`-Dmetasec.profile`, read through `DeviceProfile`), so no device is baked into the source. What you supply yourself:
 
 - **The libraries.** `libmetasec_ml.so` and its companions live under the rootfs at `data/app/<install>/lib/arm64/`. Offsets in `device/metasec.json` are matched to one build of them.
-- **Files that are placeholders here.** The ROM libraries, the APK slices and the signing certificate are stand-ins of the right size — the emulation only stats them, never parses their bytes, so the size is all that is load-bearing. Each one says so in its first line. Drop your own copies at the same paths to run against the real thing.
+- **Files that are placeholders here.** The ROM libraries and the APK slices are stand-ins of the right size — the emulation only stats them, never parses their bytes, so the size is all that is load-bearing. Each one says so in its first line. Drop your own copies at the same paths to run against the real thing.
+- **Credentials that are simply absent.** A placeholder is only honest where the bytes are never read, so nothing stands in for a certificate: the app signing certificate and the AndroidKeyStore attestation chain are left out rather than faked. "No attestation chain" is the real state of a device with no Google Mobile Services, and it is the measured client behaviour — given no chain, the client retries three times 30 s apart and then omits the one request that needs it, with the rest of the flow unaffected. A self-signed chain is worse than none, being rejected as an attempt to fake hardware attestation. Supply a real one from outside if you need that branch: [`device/keystore/README.md`](unidbg-android/src/test/resources/example_binaries/metasec/device/keystore/README.md).
 
 ## Also here: replay instead of environment-building
 
