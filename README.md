@@ -12,6 +12,23 @@
 > Added purely for academic exchange and technical discussion — questions about the emulation
 > and fidelity work are welcome.
 
+### 进群交流 / Join the study group
+
+建了一个【**安卓逆向 trace 交流群**】，欢迎对 unidbg 补环境、模拟器保真度、
+native trace、协议还原这些方向感兴趣的同学进来一起讨论。大家把自己踩过的坑、
+量出来的数据、读源码的心得拿出来摆一摆，比一个人磨快很多。
+**纯技术学习交流，不做别的。**
+
+<img src="assets/wechat-group.jpg" alt="安卓逆向 trace 交流群" width="300">
+
+> 微信群二维码有效期只有 7 天（图中这张到 **11 月 24 日**）。过期了直接加上面的微信
+> `klovemh3344`，我拉你进群。
+
+A WeChat group for Android reverse-engineering and trace work — emulation fidelity, environment
+building, native tracing, protocol reconstruction. Technical discussion only. WeChat group QR codes
+expire after 7 days (this one on **24 November**); once it lapses, add `klovemh3344` and I will invite
+you directly.
+
 You know the two bad afternoons.
 
 The first: you set a hook, or patch an instruction, and *nothing happens*. No error, no warning. The callback never fires, the patch never takes, and you spend hours doubting your address arithmetic — because the engine was quietly re-running a translation it cached before your hook existed.
